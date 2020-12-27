@@ -1,0 +1,51 @@
+user-form()
+  .user-sign
+    margin: 100px auto
+    width: 100%
+    max-width: 530px
+    box-sizing: border-box
+    .nav-item
+      display: inline-block
+      width: 120px
+      text-align: center
+      font-weight: 600
+      font-size: $font-size-medium-x
+      &:not(.active)
+        cursor: pointer
+      &.active
+        position: relative
+        color: $color-theme
+        &::after
+          content: ''
+          display: block
+          position: absolute
+          bottom: -20px
+          left: 0
+          height: 2px
+          width: 100%
+          background: currentColor
+    .svg-captcha
+      overflow: hidden
+      box-sizing: border-box
+      margin-left: 8px
+      display: inline-block
+      padding: 0
+      height: 40px
+      vertical-align: middle
+      border: 1px solid #ededed
+      border-radius: 2px
+      cursor: pointer
+    .form-wrapper
+      margin-top: 20px
+      width: 100%
+      max-width: 460px
+      .user-form
+        .input-item
+          width: 100%
+          &.captcha-input
+            width: calc(100% - 160px)
+    .forget
+      margin-left: 10px
+      color: $color-text
+      font-weight: 500
+

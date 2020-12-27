@@ -1,0 +1,25 @@
+user-setting()
+  .setting-wrap
+    padding: 20px
+    .tab-list
+      display: flex
+      align-items: center
+      height: 40px
+      border-bottom: 1px solid #ededed
+      .tab-item
+        padding: 0 15px
+        border-bottom: 2px solid rgba(255, 255, 255, 0)
+        &.active
+          border-bottom: 2px solid $color-theme
+          .tab-link
+            color: $color-theme
+        .tab-link
+          display: block
+          height: 100%
+          line-height: 40px
+          color: $color-text
+          transition: color linear 0.2s
+          &:hover
+            color: $color-theme
+    .setting-router
+      margin-top: 20px

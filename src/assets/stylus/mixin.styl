@@ -1,0 +1,60 @@
+
+// 不换行
+no-wrap() {
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+// 显示两行
+line-2() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+vertical-center() {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+// flex居中
+flex-center() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+color-transition() {
+  transition: color 0.3s linear;
+}
+
+// 虚线底部边框
+dotted-bottom() {
+  border-bottom: 1px dotted #E9E9E9;
+}
+
+box-card() {
+  margin-bottom: 15px;
+  border-radius: 2px;
+  background-color: #fff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+box-head() {
+  padding: 0 15px;
+  height: 50px;
+  box-sizing: border-box;
+  line-height: 50px;
+}
+
+box-content() {
+  padding: 20px 15px;
+  box-sizing: border-box;
+}
