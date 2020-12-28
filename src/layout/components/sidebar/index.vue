@@ -38,23 +38,23 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useStore } from '@/store/index'
+import { useRoute } from 'vue-router'
 export default defineComponent({
   data() {
     return {
-      isCollapse: false,
-      activePath: ''
+      isCollapse: false
     }
   },
-  created() {
-    this.activePath = this.$route.meta.activePath
-  },
   setup() {
+    const route = useRoute()
+    const activePath = route.meta.activePath
     const store = useStore()
     const device = computed(() => store.state.app.device)
     const sidebarStatus = computed(() => store.state.app.sidebarStatus)
     return {
       device,
-      sidebarStatus
+      sidebarStatus,
+      activePath
     }
   }
 })
