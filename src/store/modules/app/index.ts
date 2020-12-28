@@ -27,12 +27,20 @@ const mutations = {
   }
 }
 
+const actions = {
+  toggleSidebar: ({commit, state}) => {
+    const sidebarStatus = state.sidebarStatus === 'opened' ? 'closed' : 'opened'
+    commit('toggleSidebar', sidebarStatus)
+  }
+}
+
 const namespaced = true
 //第一个参数当前state定义，第二个根state定义
 const appModule: Module<AppState, RootStateTypes> = {
   namespaced,
   state,
-  mutations
+  mutations,
+  actions
 }
 
 export default appModule

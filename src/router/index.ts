@@ -10,8 +10,31 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: 'dashboard',
-        name: 'Dashboard',
-        component: () => import('@/views/Home.vue')
+        name: 'dashboard',
+        component: () => import('@/views/dashboard/index.vue')
+      }
+    ]
+  },
+  {
+    path: '/permission',
+    redirect: '/permission/page',
+    component: Layout,
+    name: 'permission',
+    children: [
+      {
+        path: 'page',
+        name: 'permissionPage',
+        component: () => import('@/views/permission/page.vue')
+      },
+      {
+        path: 'directive',
+        name: 'permissionDirective',
+        component: () => import('@/views/permission/directive.vue')
+      },
+      {
+        path: 'role',
+        name: 'permissionRole',
+        component: () => import('@/views/permission/role.vue')
       }
     ]
   },
