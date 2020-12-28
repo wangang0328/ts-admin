@@ -11,7 +11,10 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'dashboard',
         name: 'dashboard',
-        component: () => import('@/views/dashboard/index.vue')
+        component: () => import('@/views/dashboard/index.vue'),
+        meta: {
+          activePath: '/dashboard'
+        }
       }
     ]
   },
@@ -24,17 +27,26 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'page',
         name: 'permissionPage',
-        component: () => import('@/views/permission/page.vue')
+        component: () => import('@/views/permission/page.vue'),
+        meta: {
+          activePath: '/permission/page'
+        }
       },
       {
         path: 'directive',
         name: 'permissionDirective',
-        component: () => import('@/views/permission/directive.vue')
+        component: () => import('@/views/permission/directive.vue'),
+        meta: {
+          activePath: '/permission/directive'
+        }
       },
       {
         path: 'role',
         name: 'permissionRole',
-        component: () => import('@/views/permission/role.vue')
+        component: () => import('@/views/permission/role.vue'),
+        meta: {
+          activePath: '/permission/role'
+        }
       }
     ]
   },

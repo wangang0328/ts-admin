@@ -2,7 +2,7 @@
   <div class="h-100">
     <el-scrollbar class="h-100 el-scroll" wrap-class="scrollbar-wrapper">
       <el-menu
-        default-active="1-4-1"
+        :default-active="activePath"
         class="sidebar-list"
         :collapse-transition="false"
         :collapse="sidebarStatus !== 'opened' && device === 'desktop'"
@@ -12,25 +12,22 @@
         :router="true"
       >
         <el-menu-item index="/dashboard">
-          <router-link to="/dashboard">
-            <i class="el-icon-s-home sidebar-icon"/>
-            <template #title>Dashboard</template>
-          </router-link>
-          
+          <i class="el-icon-s-home sidebar-icon" />
+          <template #title>Dashboard</template>
         </el-menu-item>
         <el-submenu index="/permission">
           <template #title>
             <i class="el-icon-lock sidebar-icon" />
             <span>权限管理</span>
           </template>
-          <el-menu-item-group>
-            <el-menu-item index="/permission/directive">指令管理</el-menu-item>
-            <el-menu-item index="/permission/role">角色管理</el-menu-item>
-            <el-menu-item index="/permission/page">页面管理</el-menu-item>
-          </el-menu-item-group>
+          <el-menu-item index="/permission/directive">
+            指令管理
+          </el-menu-item>
+          <el-menu-item index="/permission/role">角色管理</el-menu-item>
+          <el-menu-item index="/permission/page">页面管理</el-menu-item>
         </el-submenu>
         <el-menu-item index="3" disabled>
-          <i class="el-icon-document sidebar-icon"/>
+          <i class="el-icon-document sidebar-icon" />
           <template #title>导航三</template>
         </el-menu-item>
       </el-menu>
@@ -44,8 +41,12 @@ import { useStore } from '@/store/index'
 export default defineComponent({
   data() {
     return {
-      isCollapse: false
+      isCollapse: false,
+      activePath: ''
     }
+  },
+  created() {
+    this.activePath = this.$route.meta.activePath
   },
   setup() {
     const store = useStore()
@@ -70,4 +71,15 @@ export default defineComponent({
   min-height: 400px
 .sidebar-icon
   color: rgb(191, 203, 217)
+.sidebar-item
+  display: block
+  width: 100%
+
+/deep/.nest-menu
+  .el-menu-item
+    background-color: #1f2d3d !important
+    &:hover
+      background-color: #001528 !important
+/deep/.el-menu--inline
+  background-color: #f00
 </style>
