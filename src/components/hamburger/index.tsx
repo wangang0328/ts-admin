@@ -13,13 +13,12 @@ export default defineComponent({
       store.commit('app/closeSidebar')
     }
     watchEffect(() => {
-      // device = store.state.app.device
       if (device.value === 'mobile') {
         closeSidebar()
       }
     })
     return () => (
-      <div>
+      <div class="h-100">
         <div class="hamburger-container" onClick={toggleSidebar}>
           <i
             class={`hamburger ${

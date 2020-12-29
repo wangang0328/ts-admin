@@ -64,6 +64,7 @@ export default defineComponent({
 .el-scroll
   background: #304156
 .sidebar-list
+  user-select: none
   transition: width 0.3s linear
   border: none
 .sidebar-list:not(.el-menu--collapse)
@@ -71,15 +72,10 @@ export default defineComponent({
   min-height: 400px
 .sidebar-icon
   color: rgb(191, 203, 217)
-.sidebar-item
-  display: block
-  width: 100%
 
-/deep/.nest-menu
+/deep/.el-menu--inline
   .el-menu-item
     background-color: #1f2d3d !important
     &:hover
       background-color: #001528 !important
-/deep/.el-menu--inline
-  background-color: #f00
 </style>

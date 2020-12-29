@@ -7,6 +7,9 @@ export default {
   data() {
     return {}
   },
+  mounted(){
+    console.log(this.$route)
+  },
   methods: {}
 }
 </script>

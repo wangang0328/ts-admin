@@ -1,8 +1,39 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-// import Home from '../views/Home.vue'
+import {
+  createRouter,
+  createWebHistory,
+  RouteRecordRaw
+} from 'vue-router'
 import Layout from '@/layout/index.vue'
 
-const routes: Array<RouteRecordRaw> = [
+
+export const constantRoutes: Array<RouteRecordRaw> = [
+  {
+    path: '/profile',
+    component: () => import('@/views/profile/index.vue'),
+    meta: {
+      hidden: true,
+      title: 'profile'
+    }
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/error/404.vue'),
+    meta: {
+      hidden: true,
+      title: '404'
+    }
+  },
+  {
+    path: '/401',
+    component: () => import('@/views/error/401.vue'),
+    meta: {
+      hidden: true,
+      title: '401'
+    }
+  }
+]
+
+export const asyncRoutes: Array<RouteRecordRaw> = [
   {
     path: '/',
     redirect: '/dashboard',
@@ -13,7 +44,8 @@ const routes: Array<RouteRecordRaw> = [
         name: 'dashboard',
         component: () => import('@/views/dashboard/index.vue'),
         meta: {
-          activePath: '/dashboard'
+          activePath: '/dashboard',
+          title: 'Dashboard'
         }
       }
     ]
@@ -23,13 +55,17 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/permission/page',
     component: Layout,
     name: 'permission',
+    meta: {
+      title: '权限管理'
+    },
     children: [
       {
         path: 'page',
         name: 'permissionPage',
         component: () => import('@/views/permission/page.vue'),
         meta: {
-          activePath: '/permission/page'
+          activePath: '/permission/page',
+          title: '页面管理'
         }
       },
       {
@@ -37,7 +73,8 @@ const routes: Array<RouteRecordRaw> = [
         name: 'permissionDirective',
         component: () => import('@/views/permission/directive.vue'),
         meta: {
-          activePath: '/permission/directive'
+          activePath: '/permission/directive',
+          title: '指令管理'
         }
       },
       {
@@ -45,7 +82,8 @@ const routes: Array<RouteRecordRaw> = [
         name: 'permissionRole',
         component: () => import('@/views/permission/role.vue'),
         meta: {
-          activePath: '/permission/role'
+          activePath: '/permission/role',
+          title: '角色管理'
         }
       }
     ]
@@ -61,9 +99,14 @@ const routes: Array<RouteRecordRaw> = [
   }
 ]
 
+//scrollbehavior
 const router = createRouter({
+  scrollBehavior: () =>
+    new Promise(() => {
+      return { x: 0 }
+    }),
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes: asyncRoutes
 })
 
 export default router

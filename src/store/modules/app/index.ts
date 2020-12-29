@@ -23,7 +23,7 @@ const mutations = {
     state.sidebarStatus = 'closed'
   },
   setSize: (state: AppState, size: number) => {
-    state[size] = size
+    state.size = parseInt(size.toFixed(0))
   }
 }
 
