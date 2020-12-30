@@ -1,10 +1,5 @@
-import {
-  createRouter,
-  createWebHistory,
-  RouteRecordRaw
-} from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/index.vue'
-
 
 export const constantRoutes: Array<RouteRecordRaw> = [
   {
@@ -13,6 +8,14 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     meta: {
       hidden: true,
       title: 'profile'
+    }
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/login/index.vue'),
+    meta: {
+      hidden: true,
+      title: 'login'
     }
   },
   {
@@ -106,7 +109,7 @@ const router = createRouter({
       return { x: 0 }
     }),
   history: createWebHistory(process.env.BASE_URL),
-  routes: asyncRoutes
+  routes: constantRoutes.concat(asyncRoutes)
 })
 
 export default router

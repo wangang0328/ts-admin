@@ -18,6 +18,12 @@
     "paths": {
       "@/*": [
         "src/*"
+      ],
+      "components/*": [
+        "src/components/*"
+      ],
+      "util/*": [
+        "src/util/*"
       ]
     },
     "lib": [
@@ -32,8 +38,9 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
-, "src/layout/resize.ts"  ],
+    "tests/**/*.tsx",
+    "src/layout/resize.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
