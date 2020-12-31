@@ -7,7 +7,11 @@
         <tags-view />
       </div>
       <div>slidebar</div>
-      <router-view />
+      <transition>
+        <keep-alive :include="cachedPages">
+          <router-view />
+        </keep-alive>
+      </transition>
     </div>
   </div>
 </template>
