@@ -1,6 +1,7 @@
 import { AllStateTypes, RootStateTypes } from './interface'
 import { createStore, useStore as baseUseStore } from 'vuex'
 import app from './modules/app/index'
+import user from './modules/user/index'
 // import { InjectionKey } from 'vue'
 
 export default createStore<RootStateTypes>({
@@ -8,6 +9,7 @@ export default createStore<RootStateTypes>({
   mutations: {},
   actions: {},
   modules: {
+    user,
     app
   }
 })

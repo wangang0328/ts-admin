@@ -28,7 +28,7 @@ const mutations = {
 }
 
 const actions = {
-  toggleSidebar: ({commit, state}) => {
+  toggleSidebar: ({ commit, state }) => {
     const sidebarStatus = state.sidebarStatus === 'opened' ? 'closed' : 'opened'
     commit('toggleSidebar', sidebarStatus)
   }
