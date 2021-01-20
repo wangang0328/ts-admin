@@ -6,7 +6,6 @@
         <navbar />
         <tags-view />
       </div>
-      <div>slidebar</div>
       <transition>
         <keep-alive :include="cachedPages">
           <router-view />
