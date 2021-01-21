@@ -6,11 +6,7 @@
         <navbar />
         <tags-view />
       </div>
-      <transition>
-        <keep-alive :include="cachedPages">
-          <router-view />
-        </keep-alive>
-      </transition>
+        <router-view />
     </div>
   </div>
 </template>
@@ -49,6 +45,7 @@ export default defineComponent({
   .main-container
     flex: 1
     width: 100%
+    overflow: hidden
 .mobile
   .sidebar-container
     z-index: 1008
