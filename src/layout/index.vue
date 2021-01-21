@@ -6,7 +6,7 @@
         <navbar />
         <tags-view />
       </div>
-        <router-view />
+      <router-view />
     </div>
   </div>
 </template>
