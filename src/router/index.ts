@@ -68,7 +68,8 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/views/permission/page.vue'),
         meta: {
           activePath: '/permission/page',
-          title: '页面管理'
+          title: '页面管理',
+          roles: ['admin', 'user']
         }
       },
       {
@@ -77,7 +78,8 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/views/permission/directive.vue'),
         meta: {
           activePath: '/permission/directive',
-          title: '指令管理'
+          title: '指令管理',
+          roles: ['admin', 'user']
         }
       },
       {
@@ -86,7 +88,8 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/views/permission/role.vue'),
         meta: {
           activePath: '/permission/role',
-          title: '角色管理'
+          title: '角色管理',
+          roles: ['admin', 'user']
         }
       }
     ]
