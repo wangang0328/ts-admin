@@ -1,5 +1,5 @@
 import { computed, defineComponent } from 'vue'
-import "./index.styl"
+import './index.styl'
 export default defineComponent({
   props: {
     iconClass: {
@@ -11,7 +11,7 @@ export default defineComponent({
       default: ''
     }
   },
-  setup(props, {attrs}) {
+  setup(props) {
     const iconName = computed(() => `#icon-${props.iconClass}`)
     const svgClass = computed(() => `svg-icon ${props.className}`)
 
