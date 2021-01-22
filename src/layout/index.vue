@@ -2,11 +2,13 @@
   <div class="app-wrapper h-100" :class="[device, sidebarStatus]">
     <sidebar class="sidebar-container" />
     <div class="main-container">
-      <div>
-        <navbar />
-        <tags-view />
-      </div>
-      <router-view />
+      <el-scrollbar style="height: 100%;">
+        <div>
+          <navbar />
+          <tags-view />
+        </div>
+        <router-view />
+      </el-scrollbar>
     </div>
   </div>
 </template>
