@@ -27,7 +27,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="组件" prop="component">
-        <el-input v-model="component" placeholder="菜单路由" >
+        <el-input v-model="component" placeholder="菜单路由">
           <template #prepend>()=>import('@/views/</template>
           <template #append>.vue')</template>
         </el-input>
@@ -74,7 +74,7 @@ import { MenuForm } from './interface'
 
 export default {
   name: 'MenuOptions',
-  setup() {
+  setup(props, { emit }) {
     const menuFormEl: Ref = ref(null)
     const menuForm: MenuForm = reactive({
       title: '',
@@ -109,13 +109,13 @@ export default {
       component: [{ required: true, message: '请输入组件', trigger: 'blur' }]
     }
 
-    
-
     function submitForm(): void {
       menuFormEl.value.validate(valid => {
-        if(!valid){
+        if (!valid) {
           return
         }
+        emit('submitMenuForm', { ...menuForm })
+        console.log(menuForm)
         console.log('提交成功')
       })
     }
@@ -137,6 +137,4 @@ export default {
 }
 </script>
 
-<style scoped lang="stylus">
-
-</style>
+<style scoped lang="stylus"></style>
