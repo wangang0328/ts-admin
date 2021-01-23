@@ -9,7 +9,7 @@
       ref="menuFormEl"
       label-width="100px"
       class="demo-ruleForm"
-      :disabled="false"
+      :disabled="!enable"
     >
       <el-form-item label="菜单标题" prop="title">
         <el-input v-model="title" placeholder="请输入菜单标题" />
@@ -74,7 +74,14 @@ import { MenuForm } from './interface'
 
 export default {
   name: 'MenuOptions',
+  props: {
+    enable: {
+      required: true,
+      default: false
+    }
+  },
   setup(props, { emit }) {
+    console.log(props.enable)
     const menuFormEl: Ref = ref(null)
     const menuForm: MenuForm = reactive({
       title: '',

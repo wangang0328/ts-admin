@@ -52,8 +52,7 @@
       :highlight-current="true"
       accordion
       @current-change="handleNodeChange"
-    >
-    </el-tree>
+    />
   </el-card>
 </template>
 
@@ -124,6 +123,7 @@ export default {
         ]
       }
     ]
+
     const menuTree = reactive(menuList)
 
     function selectPrompt() {
@@ -178,7 +178,8 @@ export default {
     function handleNodeChange(data) {
       console.log('en')
       selectedName = data.name
-      emit('selectedName', selectedName)
+      emit('curOperate', undefined)
+      emit('selectedNameChange', selectedName)
     }
 
     return {

@@ -1,4 +1,6 @@
-export type MenuType = 'menu' | 'resource'
+// export type OperateType = 'addBro' | 'addChild' | 'editNode' | 'delNode';
+// export type OperatesType = 'menu' | 'resource';
+export type MenuType = 'menu' | 'resource';
 
 export interface MenuForm {
   title: string
