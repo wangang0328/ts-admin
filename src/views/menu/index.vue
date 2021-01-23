@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="10" class="menu-wrapper px-10">
     <el-col :xs="24" :sm="9" :md="7">
-      <MenuList @selectedNameChange="menuSelectedChangeHandler" @curOperate="curOperateChangeHandler"/>
+      <MenuList :curNodeName="selectedName" :curOperateType="curOperateType" @selectedNameChange="menuSelectedChangeHandler" @curOperate="curOperateChangeHandler"/>
     </el-col>
     <el-col :xs="24" :sm="15" :md="17">
       <MenuOptions
@@ -34,7 +34,7 @@ export default {
     const enableForm = ref(false)
     const curOperateType: Ref<string> = ref('')
     const curTree = ref(null)
-    const selectedName: Ref<string | undefined> = ref('')
+    const selectedName: Ref<string> = ref('')
 
     function editEnableHandler() {
       const editTypeList = ['editNode', 'addChild', 'addBro']
@@ -46,18 +46,16 @@ export default {
       enableForm.value = false
     }
 
-    function handleNodeClick(data) {
-      console.log(data)
-    }
-
     function curOperateChangeHandler(type: OperateType) {
       curOperateType.value = type
       editEnableHandler()
     }
+
     function handleMenuFormSubmit(data) {
       console.log(data)
     }
-    function menuSelectedChangeHandler(name: string | undefined) {
+
+    function menuSelectedChangeHandler(name: string) {
       selectedName.value = name
       editEnableHandler()
     }
@@ -66,6 +64,7 @@ export default {
       curTree,
       menuSelectedChangeHandler,
       curOperateChangeHandler,
+      handleMenuFormSubmit,
       enableForm
     }
   }

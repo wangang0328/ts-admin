@@ -57,12 +57,15 @@
 </template>
 
 <script lang="ts">
-import { reactive } from 'vue'
+import { reactive, toRefs } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 export default {
   name: 'MenuList',
-  data() {
-    return {}
+  props: {
+    curNodeName: {
+      type: String,
+      default: ''
+    }
   },
   setup(props, { emit }) {
     /* {
@@ -81,6 +84,7 @@ export default {
     /* let isSelected = false //是否选中menu tree
     let treeList = [] */
     let selectedName: string
+    // let { curNodeName } = toRefs(props)
     // let canEdit: boolean //form是否可以编辑
     const menuList = [
       {
@@ -178,8 +182,8 @@ export default {
     function handleNodeChange(data) {
       console.log('en')
       selectedName = data.name
-      emit('curOperate', undefined)
-      emit('selectedNameChange', selectedName)
+      emit('curOperate', '')
+      emit('selectedNameChange', selectedName || '')
     }
 
     return {
