@@ -11,15 +11,18 @@
       />
     </el-col>
     <el-col :xs="24" :sm="15" :md="17">
+      {{ curSelectNode.name }}
+      || {{ selectedName }}
       <MenuOptions
         @submitMenuForm="handleMenuFormSubmit"
         :enable="enableForm"
+        :formValue="curSelectNode"
+        ref="menuFormEl"
       />
       <el-card>
         <template #header>
           <p class="menu-title">资源选项</p>
         </template>
-        <div @click="testHandler">测试watch</div>
       </el-card>
     </el-col>
   </el-row>
@@ -44,10 +47,10 @@ export default {
     const curOperateType: Ref<OperateType> = ref('')
     const curTree = ref(null)
     const selectedName: Ref<string> = ref('')
-    // const testList = reactive([]) as any[]
     const menuListEl: Ref = ref(null)
-    // const menuTree: Reactive<MenuForm[]> = reactive([])
-    // const menuTree = reactive([])
+    const menuFormEl: Ref = ref(null)
+    const curSelectNode = reactive({}) as MenuTreeData
+
     let menuTree = reactive([]) as MenuTreeData[]
     function editEnableHandler() {
       const editTypeList = ['editNode', 'addChild', 'addBro']
@@ -70,6 +73,10 @@ export default {
     function curOperateChangeHandler(type: OperateType) {
       curOperateType.value = type
       editEnableHandler()
+      //编辑节点
+      if (selectedName.value && type === 'editNode') {
+        //curNode
+      }
     }
 
     //兄弟节点
@@ -106,10 +113,10 @@ export default {
           if (curMenu.children && curMenu.children.length === 0) {
             curMenu.children = [{ label: menuData.name, ...menuData }]
           } else {
-            curMenu.children = [
-              ...curMenu.children,
-              { label: menuData.name, ...menuData }
-            ]
+            curMenu.children = sortObjList(
+              [...curMenu.children, { label: menuData.name, ...menuData }],
+              'name'
+            )
           }
           return parentMenu
         } else {
@@ -126,7 +133,6 @@ export default {
     }
 
     function handleMenuFormSubmit(menuData: MenuForm) {
-      console.log(menuData, '------')
       //获取当前操作的treeDom [{name: 'aaa', children[{name:'ccc'}]}, {}]
       //selectedName.value
       //判断当前操作类型
@@ -143,21 +149,28 @@ export default {
       } else if (curOperateType.value === 'addChild') {
         //添加子菜单
         menuTree = handleAddChildMenu(menuTree, selectedName.value, menuData)
+      } else if (curOperateType.value === 'editNode') {
+        //do something
       }
       selectedName.value = ''
       curOperateType.value = ''
       enableForm.value = false
       menuListEl.value.resetMenuOpen()
+      menuFormEl.value.resetForm()
     }
 
-    function menuSelectedChangeHandler(name: string) {
-      selectedName.value = name
+    function menuSelectedChangeHandler(data: MenuTreeData) {
+      console.log(data.name, '----')
+      // curSelectNode.name = data.name
+      for (const key in data) {
+        // console.log(key)
+        curSelectNode[key] = data[key]
+      }
+      // console.log(curSelectNode)
+      selectedName.value = data.name
       editEnableHandler()
     }
 
-    function testHandler() {
-      selectedName.value = Math.random() + 'a'
-    }
     return {
       curOperateType,
       curTree,
@@ -167,8 +180,9 @@ export default {
       enableForm,
       menuTree,
       selectedName,
-      testHandler,
-      menuListEl
+      menuListEl,
+      menuFormEl,
+      curSelectNode
     }
   }
 }

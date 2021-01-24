@@ -69,19 +69,25 @@
 </template>
 
 <script lang="ts">
-import { reactive, ref, Ref, toRefs } from 'vue'
-import { MenuForm } from './interface'
+import { reactive, ref, Ref, toRefs, PropType, watch, watchEffect } from 'vue'
+import { MenuForm, MenuTreeData } from './interface'
 
 export default {
   name: 'MenuOptions',
   props: {
     enable: {
+      type: Boolean,
       required: true,
       default: false
+    },
+    formValue: {
+      type: Object as PropType<MenuTreeData>,
+      required: true
     }
   },
   setup(props, { emit }) {
     console.log(props.enable)
+    const { formValue, enable } = toRefs(props)
     const menuFormEl: Ref = ref(null)
     const menuForm: MenuForm = reactive({
       title: '',
@@ -97,6 +103,14 @@ export default {
       type: 'menu',
       children: [],
       operations: []
+    })
+    watch(enable, newVal => {
+      console.log(newVal)
+      // menuForm = { ...newVal }
+    })
+    watch(formValue, newVal => {
+      console.log(newVal)
+      // menuForm = { ...newVal }
     })
     function validateMenuName(rule: any, value: string, callback: Function) {
       const reg = /[A-Za-z]+/
@@ -129,8 +143,7 @@ export default {
     }
 
     function resetForm(): void {
-      //重置
-      console.log('重置')
+      menuFormEl.value.resetFields()
     }
 
     return {

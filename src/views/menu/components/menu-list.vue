@@ -145,10 +145,11 @@ export default {
     }
     //选中节点监听
     function handleNodeChange(data) {
-      console.log('en')
-      selectedName = data.name
-      emit('curOperate', '')
-      emit('selectedNameChange', selectedName || '')
+      console.log(data.name, curNodeName.value)
+      if (data.name !== curNodeName.value) {
+        emit('curOperate', '')
+        emit('selectedNameChange', data || null)
+      }
     }
 
     return {
