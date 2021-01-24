@@ -22,3 +22,9 @@ export class Debounced {
     }
   }
 }
+
+export function sortObjList<T>(list: T[], sortBy: string): T[] {
+  return list.sort((a, b) => {
+    return a[sortBy] - b[sortBy]
+  })
+}

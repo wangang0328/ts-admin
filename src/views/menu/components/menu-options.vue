@@ -95,6 +95,7 @@ export default {
       sort: 200,
       redirect: '',
       type: 'menu',
+      children: [],
       operations: []
     })
     function validateMenuName(rule: any, value: string, callback: Function) {

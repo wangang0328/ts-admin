@@ -45,10 +45,15 @@
         </div>
       </div>
     </template>
-
+    <div>
+      <!-- <ul>
+        <li v-for="item in testList" :key="item.id">{{ item.name }}</li>
+      </ul> -->
+      <!-- <el-tree :data="testList" accordion node-key="id" /> -->
+    </div>
     <el-tree
+      v-if="openMenu"
       :data="menuTree"
-      :props="defaultProps"
       :highlight-current="true"
       accordion
       @current-change="handleNodeChange"
@@ -57,85 +62,45 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs } from 'vue'
+import { toRefs, PropType, watch, ref, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { MenuTreeData } from './interface'
 export default {
   name: 'MenuList',
   props: {
     curNodeName: {
       type: String,
       default: ''
+    },
+    menuTree: {
+      type: Array as PropType<MenuTreeData[]>,
+      default: () => [],
+      required: true
     }
   },
   setup(props, { emit }) {
-    /* {
-        label: '一级 1',
-        children: [
-          {
-            label: '二级 1-1',
-            children: [
-              {
-                label: '三级 1-1-1'
-              }
-            ]
-          }
-        ]
-      }, */
-    /* let isSelected = false //是否选中menu tree
-    let treeList = [] */
+    const { menuTree, curNodeName } = toRefs(props)
+    const openMenu = ref(true)
     let selectedName: string
-    // let { curNodeName } = toRefs(props)
-    // let canEdit: boolean //form是否可以编辑
-    const menuList = [
-      {
-        label: '一级 1',
-        title: 'iii',
-        name: 'ad',
-        path: 'a',
-        children: [
-          {
-            label: '二级 1-1',
-            name: 'addd',
-            children: [
-              {
-                name: 'bvsdd',
-                label: '三级 1-1-1'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        label: '一级 2',
-        children: [
-          {
-            label: '二级 2-1',
-            children: [
-              {
-                label: '三级 2-1-1'
-              }
-            ]
-          },
-          {
-            label: '二级 2-2',
-            children: [
-              {
-                label: '三级 2-2-1'
-              }
-            ]
-          }
-        ]
-      }
-    ]
 
-    const menuTree = reactive(menuList)
+    //监听curNodeName
+    watch(curNodeName, (value: string) => {
+      selectedName = value
+      console.log(value)
+    })
 
+    function resetMenuOpen() {
+      openMenu.value = false
+      nextTick(() => {
+        openMenu.value = true
+      })
+    }
     function selectPrompt() {
       ElMessage.error('请选择需要操作的菜单')
     }
     //添加兄弟菜单
     function addBroHandler() {
-      if (!selectedName) {
+      if (!selectedName && menuTree.value.length !== 0) {
         return selectPrompt()
       }
       emit('curOperate', 'addBro')
@@ -187,12 +152,13 @@ export default {
     }
 
     return {
-      menuTree,
       addBroHandler,
       editMenuHandler,
       delMenuHandler,
       addChildHandler,
-      handleNodeChange
+      handleNodeChange,
+      resetMenuOpen,
+      openMenu
     }
   }
 }
