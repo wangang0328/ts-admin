@@ -3,6 +3,7 @@
     <el-col :xs="24" :sm="9" :md="7">
       <MenuList
         :curNodeName="selectedName"
+        :expandNodeName="expandNodeName"
         :curOperateType="curOperateType"
         :menuTree="menuTree"
         @selectedNameChange="menuSelectedChangeHandler"
@@ -11,19 +12,15 @@
       />
     </el-col>
     <el-col :xs="24" :sm="15" :md="17">
-      {{ curSelectNode.name }}
-      || {{ selectedName }}
       <MenuOptions
         @submitMenuForm="handleMenuFormSubmit"
         :enable="enableForm"
         :formValue="curSelectNode"
+        :curNodeName="selectedName"
+        :curOperateType="curOperateType"
         ref="menuFormEl"
       />
-      <el-card>
-        <template #header>
-          <p class="menu-title">资源选项</p>
-        </template>
-      </el-card>
+      <SourceOptions />
     </el-col>
   </el-row>
 </template>
@@ -32,15 +29,16 @@
 import { reactive, Ref, ref } from 'vue'
 import MenuOptions from './components/menu-options.vue'
 import MenuList from './components/menu-list.vue'
-import { MenuForm, MenuTreeData } from './components/interface'
+import SourceOptions from './components/source-options.vue'
+import { MenuForm, MenuTreeData, OperateType } from './components/interface'
 import { sortObjList } from '@/util/index'
-type OperateType = 'addBro' | 'addChild' | 'editNode' | 'delNode' | ''
 
 export default {
   name: 'Menu',
   components: {
     MenuOptions,
-    MenuList
+    MenuList,
+    SourceOptions
   },
   setup() {
     const enableForm = ref(false)
@@ -50,7 +48,7 @@ export default {
     const menuListEl: Ref = ref(null)
     const menuFormEl: Ref = ref(null)
     const curSelectNode = reactive({}) as MenuTreeData
-
+    const expandNodeName = ref('')
     let menuTree = reactive([]) as MenuTreeData[]
     function editEnableHandler() {
       const editTypeList = ['editNode', 'addChild', 'addBro']
@@ -70,105 +68,137 @@ export default {
       enableForm.value = false
     }
 
-    function curOperateChangeHandler(type: OperateType) {
-      curOperateType.value = type
-      editEnableHandler()
-      //编辑节点
-      if (selectedName.value && type === 'editNode') {
-        //curNode
-      }
-    }
-
-    //兄弟节点
-    function handleAddBroMenu(
-      parentMenu: MenuTreeData[],
-      selectMenuName: string,
-      menuData: MenuForm
-    ): MenuTreeData[] {
-      // debugger
-      for (let i = 0; i < parentMenu.length; i++) {
-        const curMenu = parentMenu[i]
-        if (curMenu.name === selectMenuName) {
-          parentMenu.push({ label: menuData.name, ...menuData })
-          parentMenu = sortObjList(parentMenu, 'sort')
-          return parentMenu
-        } else {
-          if (curMenu.children && curMenu.children.length !== 0) {
-            return handleAddBroMenu(curMenu.children, selectMenuName, menuData)
-          }
-        }
-      }
-      return parentMenu
-    }
-
-    //子节点
-    function handleAddChildMenu(
-      parentMenu: MenuTreeData[],
-      selectMenuName: string,
-      menuData: MenuForm
-    ): MenuTreeData[] {
-      for (let i = 0; i < parentMenu.length; i++) {
-        const curMenu = parentMenu[i]
-        if (curMenu.name === selectMenuName) {
-          if (curMenu.children && curMenu.children.length === 0) {
-            curMenu.children = [{ label: menuData.name, ...menuData }]
+    const menuProcessor = {
+      addBro(
+        parentMenu: MenuTreeData[],
+        selectMenuName: string,
+        menuData: MenuForm
+      ): MenuTreeData[] {
+        for (let i = 0; i < parentMenu.length; i++) {
+          const curMenu = parentMenu[i]
+          if (curMenu.name === selectMenuName) {
+            parentMenu.push({ label: menuData.name, ...menuData })
+            parentMenu = sortObjList(parentMenu, 'sort')
+            return parentMenu
           } else {
-            curMenu.children = sortObjList(
-              [...curMenu.children, { label: menuData.name, ...menuData }],
-              'name'
-            )
-          }
-          return parentMenu
-        } else {
-          if (curMenu.children && curMenu.children.length !== 0) {
-            return handleAddChildMenu(
-              curMenu.children,
-              selectMenuName,
-              menuData
-            )
+            if (curMenu.children && curMenu.children.length !== 0) {
+              console.log(this.addBro)
+              return this.addBro(curMenu.children, selectMenuName, menuData)
+            }
           }
         }
+        return parentMenu
+      },
+      addChild(
+        parentMenu: MenuTreeData[],
+        selectMenuName: string,
+        menuData: MenuForm
+      ): MenuTreeData[] {
+        for (let i = 0; i < parentMenu.length; i++) {
+          const curMenu = parentMenu[i]
+          if (curMenu.name === selectMenuName) {
+            if (curMenu.children && curMenu.children.length === 0) {
+              curMenu.children = [{ label: menuData.name, ...menuData }]
+            } else {
+              curMenu.children = sortObjList(
+                [...curMenu.children, { label: menuData.name, ...menuData }],
+                'name'
+              )
+            }
+            return parentMenu
+          } else {
+            if (curMenu.children && curMenu.children.length !== 0) {
+              return this.addChild(curMenu.children, selectMenuName, menuData)
+            }
+          }
+        }
+        return parentMenu
+      },
+      editNode(
+        parentMenu: MenuTreeData[],
+        selectMenuName: string,
+        menuData: MenuForm
+      ): MenuTreeData[] {
+        for (let i = 0; i < parentMenu.length; i++) {
+          const curMenu = parentMenu[i]
+          if (curMenu.name === selectMenuName) {
+            for (const key in menuData) {
+              if (key !== 'children') {
+                curMenu[key] = menuData[key]
+              }
+            }
+            return parentMenu
+          } else {
+            if (curMenu.children && curMenu.children.length !== 0) {
+              return this.editNode(curMenu.children, selectMenuName, menuData)
+            }
+          }
+        }
+        return parentMenu
+      },
+      delNode(
+        parentMenu: MenuTreeData[],
+        selectMenuName: string
+      ): MenuTreeData[] {
+        for (let i = 0; i < parentMenu.length; i++) {
+          const curMenu = parentMenu[i]
+          if (curMenu.name === selectMenuName) {
+            parentMenu.splice(i, 1)
+            return parentMenu
+          } else {
+            if (curMenu.children && curMenu.children.length !== 0) {
+              return this.delNode(curMenu.children, selectMenuName)
+            }
+          }
+        }
+        return parentMenu
       }
-      return parentMenu
+    }
+    function menuOperateHandler(
+      operateKey: OperateType,
+      parentMenu: MenuTreeData[],
+      selectMenuName: string,
+      menuData?: MenuForm
+    ): MenuTreeData[] {
+      if(operateKey === 'addBro' && parentMenu && parentMenu.length === 0){
+        parentMenu.push({ label: menuData!.name, ...menuData!})
+        return parentMenu
+      }
+      return menuProcessor[operateKey](parentMenu, selectMenuName, menuData)
     }
 
-    function handleMenuFormSubmit(menuData: MenuForm) {
-      //获取当前操作的treeDom [{name: 'aaa', children[{name:'ccc'}]}, {}]
-      //selectedName.value
-      //判断当前操作类型
-      if (curOperateType.value === 'addBro') {
-        // debugger
-        //添加兄弟菜单
-        if (menuTree && menuTree.length === 0) {
-          menuTree.push({ label: menuData.name, ...menuData })
-        } else {
-          // debugger
-          menuTree = handleAddBroMenu(menuTree, selectedName.value, menuData)
-          //选中的节点置为空，当前操作为空
-        }
-      } else if (curOperateType.value === 'addChild') {
-        //添加子菜单
-        menuTree = handleAddChildMenu(menuTree, selectedName.value, menuData)
-      } else if (curOperateType.value === 'editNode') {
-        //do something
-      }
+    function initialData(){
+      expandNodeName.value = selectedName.value
       selectedName.value = ''
       curOperateType.value = ''
       enableForm.value = false
       menuListEl.value.resetMenuOpen()
       menuFormEl.value.resetForm()
     }
+    function handleMenuFormSubmit(menuData: MenuForm) {
+      menuTree = menuOperateHandler(curOperateType.value, menuTree, selectedName.value, menuData) || []
+      console.log(menuTree)
+      initialData()
+    }
 
     function menuSelectedChangeHandler(data: MenuTreeData) {
-      console.log(data.name, '----')
-      // curSelectNode.name = data.name
       for (const key in data) {
-        // console.log(key)
         curSelectNode[key] = data[key]
       }
-      // console.log(curSelectNode)
       selectedName.value = data.name
       editEnableHandler()
+    }
+
+    function curOperateChangeHandler(type: OperateType) {
+      curOperateType.value !== type ? menuFormEl.value.resetForm() : ''
+      curOperateType.value = type
+      editEnableHandler()
+      //删除节点
+      if (selectedName.value && type === 'delNode') {
+        //curNode
+        menuTree = menuOperateHandler(curOperateType.value, menuTree, selectedName.value) || []
+        initialData()
+      }
     }
 
     return {
@@ -182,7 +212,8 @@ export default {
       selectedName,
       menuListEl,
       menuFormEl,
-      curSelectNode
+      curSelectNode,
+      expandNodeName //展开node的名称
     }
   }
 }

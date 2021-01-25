@@ -67,10 +67,6 @@ export default defineComponent({
 <style scoped lang="stylus">
 .el-scroll
   background: #304156
-.sidebar-list
-  user-select: none
-  transition: width 0.3s linear
-  border: none
 .sidebar-list:not(.el-menu--collapse)
   width: 210px
   min-height: 400px

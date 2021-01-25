@@ -32,23 +32,23 @@
           <template #append>.vue')</template>
         </el-input>
       </el-form-item>
-      <el-form-item label="排序">
+      <el-form-item label="排序" prop="sort">
         <el-input v-model="sort" placeholder="请输入排序权重,只接受数字" />
       </el-form-item>
       <el-row>
         <el-col :xs="24" :sm="8">
-          <el-form-item label="显示菜单">
-            <el-switch v-model="showInMenu"></el-switch>
+          <el-form-item label="显示菜单" prop="showInMenu">
+            <el-switch id="showInMenu" v-model="showInMenu" />
           </el-form-item>
         </el-col>
         <el-col :xs="24" :sm="8">
-          <el-form-item label="显示面包屑">
-            <el-switch v-model="showInBread"></el-switch>
+          <el-form-item label="显示面包屑" prop="showInBread">
+            <el-switch id="showInBread" v-model="showInBread" />
           </el-form-item>
         </el-col>
         <el-col :xs="24" :sm="8">
-          <el-form-item label="缓存页面">
-            <el-switch v-model="isCache"></el-switch>
+          <el-form-item label="缓存页面" prop="isCache">
+            <el-switch id="cache" v-model="isCache" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -60,7 +60,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm()">
-          立即创建
+          提交
         </el-button>
         <el-button @click="resetForm()">重置</el-button>
       </el-form-item>
@@ -69,8 +69,8 @@
 </template>
 
 <script lang="ts">
-import { reactive, ref, Ref, toRefs, PropType, watch, watchEffect } from 'vue'
-import { MenuForm, MenuTreeData } from './interface'
+import { reactive, ref, Ref, toRefs, PropType, watch } from 'vue'
+import { MenuForm, MenuTreeData, OperateType } from './interface'
 
 export default {
   name: 'MenuOptions',
@@ -80,14 +80,22 @@ export default {
       required: true,
       default: false
     },
+    curNodeName: {
+      type: String,
+      required: true,
+      default: ''
+    },
     formValue: {
       type: Object as PropType<MenuTreeData>,
+      required: true
+    },
+    curOperateType: {
+      type: String as PropType<OperateType>,
       required: true
     }
   },
   setup(props, { emit }) {
-    console.log(props.enable)
-    const { formValue, enable } = toRefs(props)
+    const { formValue, curNodeName, curOperateType } = toRefs(props)
     const menuFormEl: Ref = ref(null)
     const menuForm: MenuForm = reactive({
       title: '',
@@ -104,13 +112,18 @@ export default {
       children: [],
       operations: []
     })
-    watch(enable, newVal => {
-      console.log(newVal)
-      // menuForm = { ...newVal }
-    })
-    watch(formValue, newVal => {
-      console.log(newVal)
-      // menuForm = { ...newVal }
+
+    function setFormDataFromEdit() {
+      for (const key in formValue.value) {
+        if (key !== 'label') {
+          menuForm[key] = formValue.value[key]
+        }
+      }
+    }
+
+    //改变选中的节点
+    watch(curNodeName, () => {
+      setFormDataFromEdit()
     })
     function validateMenuName(rule: any, value: string, callback: Function) {
       const reg = /[A-Za-z]+/
@@ -143,7 +156,13 @@ export default {
     }
 
     function resetForm(): void {
-      menuFormEl.value.resetFields()
+      setTimeout(() => {
+        if (curOperateType.value !== 'editNode') {
+          menuFormEl.value.resetFields()
+        } else {
+          setFormDataFromEdit()
+        }
+      }, 200)
     }
 
     return {

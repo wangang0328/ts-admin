@@ -42,7 +42,7 @@ export default defineComponent({
 .app-wrapper
   display: flex
   .sidebar-container
-    flex: none
+    // flex: none
     transition: all 0.3s linear
   .main-container
     flex: 1

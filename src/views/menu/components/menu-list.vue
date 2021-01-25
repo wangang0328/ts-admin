@@ -55,6 +55,8 @@
       v-if="openMenu"
       :data="menuTree"
       :highlight-current="true"
+      node-key="name"
+      :default-expanded-keys="[expandNodeName]"
       accordion
       @current-change="handleNodeChange"
     />
@@ -76,6 +78,10 @@ export default {
       type: Array as PropType<MenuTreeData[]>,
       default: () => [],
       required: true
+    },
+    expandNodeName: {
+      type: String,
+      default: ''
     }
   },
   setup(props, { emit }) {
@@ -145,7 +151,6 @@ export default {
     }
     //选中节点监听
     function handleNodeChange(data) {
-      console.log(data.name, curNodeName.value)
       if (data.name !== curNodeName.value) {
         emit('curOperate', '')
         emit('selectedNameChange', data || null)

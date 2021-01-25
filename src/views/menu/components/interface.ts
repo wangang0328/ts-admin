@@ -17,6 +17,7 @@ export type RequestMethod =
   | 'options'
   | 'OPTIONS'
 
+export type OperateType = 'addBro' | 'addChild' | 'editNode' | 'delNode' | ''
 export type ResourceType = 'api' | 'resource'
 export interface MenuOptions {
   name: string
