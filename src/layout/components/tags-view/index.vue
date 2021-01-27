@@ -34,7 +34,6 @@ export default {
 .tags-view
   height: 32px
   background: #fff
-  // padding
   box-sizing: border-box
   white-space: nowrap
   display: inline-block

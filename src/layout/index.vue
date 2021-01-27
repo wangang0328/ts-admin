@@ -2,7 +2,7 @@
   <div class="app-wrapper h-100" :class="[device, sidebarStatus]">
     <sidebar class="sidebar-container" />
     <div class="main-container">
-      <el-scrollbar style="height: 100%;">
+      <el-scrollbar style="height: 100%;" class="main-scroll-wrapper" :vertical="true" :horizontal="false">
         <div>
           <navbar />
           <tags-view />
@@ -57,4 +57,9 @@ export default defineComponent({
 .opened
   .sidebar-container
     left: 0
+</style>
+
+<style lang="stylus">
+.main-scroll-wrapper > .is-horizontal
+  display: none
 </style>

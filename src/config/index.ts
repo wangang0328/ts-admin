@@ -1,0 +1,1 @@
+export const requestMethodList = ['GET','PSOT','HEAD','DELETE','PUT','PATCH','OPTIONS']

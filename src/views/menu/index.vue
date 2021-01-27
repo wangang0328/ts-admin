@@ -12,31 +12,38 @@
       />
     </el-col>
     <el-col :xs="24" :sm="15" :md="17">
-      <MenuOptions
+      <MenuOptionsVue
         @submitMenuForm="handleMenuFormSubmit"
         :enable="enableForm"
         :formValue="curSelectNode"
         :curNodeName="selectedName"
         :curOperateType="curOperateType"
+        :menuTree="menuTree"
         ref="menuFormEl"
       />
-      <SourceOptions />
+      <SourceOptions
+        :enable="enableForm"
+        :curNodeName="selectedName"
+        :curOperateType="curOperateType"
+        :formValue="curSelectNode"
+        @changed="sourceOptionsChangeHandler"
+      />
     </el-col>
   </el-row>
 </template>
 
 <script lang="ts">
 import { reactive, Ref, ref } from 'vue'
-import MenuOptions from './components/menu-options.vue'
+import MenuOptionsVue from './components/menu-options.vue'
 import MenuList from './components/menu-list.vue'
 import SourceOptions from './components/source-options.vue'
-import { MenuForm, MenuTreeData, OperateType } from './components/interface'
+import { MenuForm, MenuTreeData, OperateType, SourceData } from './components/interface'
 import { sortObjList } from '@/util/index'
 
 export default {
   name: 'Menu',
   components: {
-    MenuOptions,
+    MenuOptionsVue,
     MenuList,
     SourceOptions
   },
@@ -160,14 +167,14 @@ export default {
       selectMenuName: string,
       menuData?: MenuForm
     ): MenuTreeData[] {
-      if(operateKey === 'addBro' && parentMenu && parentMenu.length === 0){
-        parentMenu.push({ label: menuData!.name, ...menuData!})
+      if (operateKey === 'addBro' && parentMenu && parentMenu.length === 0) {
+        parentMenu.push({ label: menuData!.name, ...menuData! })
         return parentMenu
       }
       return menuProcessor[operateKey](parentMenu, selectMenuName, menuData)
     }
 
-    function initialData(){
+    function initialData() {
       expandNodeName.value = selectedName.value
       selectedName.value = ''
       curOperateType.value = ''
@@ -176,8 +183,13 @@ export default {
       menuFormEl.value.resetForm()
     }
     function handleMenuFormSubmit(menuData: MenuForm) {
-      menuTree = menuOperateHandler(curOperateType.value, menuTree, selectedName.value, menuData) || []
-      console.log(menuTree)
+      menuTree =
+        menuOperateHandler(
+          curOperateType.value,
+          menuTree,
+          selectedName.value,
+          menuData
+        ) || []
       initialData()
     }
 
@@ -196,9 +208,38 @@ export default {
       //删除节点
       if (selectedName.value && type === 'delNode') {
         //curNode
-        menuTree = menuOperateHandler(curOperateType.value, menuTree, selectedName.value) || []
+        menuTree =
+          menuOperateHandler(
+            curOperateType.value,
+            menuTree,
+            selectedName.value
+          ) || []
         initialData()
       }
+    }
+
+    function editMenuOperations(
+        parentMenu: MenuTreeData[],
+        selectMenuName: string,
+        options: SourceData[] 
+      ): MenuTreeData[] {
+        for (let i = 0; i < parentMenu.length; i++) {
+          const curMenu = parentMenu[i]
+          if (curMenu.name === selectMenuName) {
+            curMenu.operations = options
+          } else {
+            if (curMenu.children && curMenu.children.length !== 0) {
+              editMenuOperations(curMenu.children, selectMenuName, options)
+            }
+          }
+        }
+        return parentMenu
+      }
+    function sourceOptionsChangeHandler(list: SourceData[]) {
+      if(selectedName.value) {
+        editMenuOperations(menuTree, selectedName.value, list)
+      }
+      console.log(menuTree)
     }
 
     return {
@@ -206,6 +247,7 @@ export default {
       curTree,
       menuSelectedChangeHandler,
       curOperateChangeHandler,
+      sourceOptionsChangeHandler,
       handleMenuFormSubmit,
       enableForm,
       menuTree,
@@ -226,4 +268,6 @@ export default {
 .menu-title
   height: 28px
   line-height: 28px
+/deep/.el-select
+  width: 100%
 </style>

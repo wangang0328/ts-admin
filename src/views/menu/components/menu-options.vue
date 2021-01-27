@@ -92,10 +92,15 @@ export default {
     curOperateType: {
       type: String as PropType<OperateType>,
       required: true
+    },
+    menuTree: {
+      type: Array as PropType<MenuTreeData[]>,
+      default: () => [],
+      required: true
     }
   },
   setup(props, { emit }) {
-    const { formValue, curNodeName, curOperateType } = toRefs(props)
+    const { formValue, curNodeName, curOperateType, menuTree } = toRefs(props)
     const menuFormEl: Ref = ref(null)
     const menuForm: MenuForm = reactive({
       title: '',
@@ -113,10 +118,26 @@ export default {
       operations: []
     })
 
+    //补全组件名称
+    function completeComponentName(name: string): string {
+      return `()=>import('@/views/${name}.vue')`
+    }
+
+    //拆分组件名称
+    function splitComponentName(name: string): string {
+      const reg = /^\(\)=>import\('@\/views\/(.*)\.vue'\)$/
+      reg.test(name)
+      return RegExp.$1
+    }
+
     function setFormDataFromEdit() {
       for (const key in formValue.value) {
         if (key !== 'label') {
-          menuForm[key] = formValue.value[key]
+          if (key === 'component') {
+            menuForm[key] = splitComponentName(formValue.value[key])
+          } else {
+            menuForm[key] = formValue.value[key]
+          }
         }
       }
     }
@@ -125,10 +146,36 @@ export default {
     watch(curNodeName, () => {
       setFormDataFromEdit()
     })
+    //校验是否重复
+    function validateMenuNameRepeat(
+      parentMenu: MenuTreeData[],
+      name: string
+    ): boolean {
+      let isRepeat = false
+      return (function validateName(parentMenu) {
+        for (let i = 0; i < parentMenu.length; i++) {
+          if (parentMenu[i].name === name) {
+            isRepeat = true
+            break
+          } else {
+            if (parentMenu[i].children && parentMenu[i].children.length !== 0) {
+              validateName(parentMenu[i].children)
+            }
+          }
+        }
+        return isRepeat
+      })(parentMenu)
+    }
     function validateMenuName(rule: any, value: string, callback: Function) {
       const reg = /[A-Za-z]+/
       if (!reg.test(value)) {
         return callback(new Error('只接受字母'))
+      }
+      if (
+        curOperateType.value !== 'editNode' &&
+        validateMenuNameRepeat(menuTree.value, value)
+      ) {
+        return callback(new Error('name字段必须唯一'))
       }
       callback()
     }
@@ -149,9 +196,8 @@ export default {
         if (!valid) {
           return
         }
-        emit('submitMenuForm', { ...menuForm })
-        console.log(menuForm)
-        console.log('提交成功')
+        const component = completeComponentName(menuForm.component)
+        emit('submitMenuForm', { ...menuForm, component })
       })
     }
 
