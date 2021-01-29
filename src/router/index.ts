@@ -95,6 +95,21 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: '/icon',
+    component: Layout,
+    redirect: 'index',
+    children: [
+      {
+        path: 'index',
+        name: 'Icon',
+        component: () => import('@/views/icons/index.vue'),
+        meta: {
+          
+        }
+      }
+    ]
+  },
+  {
     path: '/menu',
     component: Layout,
     redirect: 'index',

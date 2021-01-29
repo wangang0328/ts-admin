@@ -26,6 +26,10 @@
           <el-menu-item index="/permission/role">角色管理</el-menu-item>
           <el-menu-item index="/permission/page">页面管理</el-menu-item>
         </el-submenu>
+        <el-menu-item index="/icon/index">
+          <i class="el-icon-document sidebar-icon" />
+          <template #title>图标</template>
+        </el-menu-item>
         <el-menu-item index="/menu/index">
           <i class="el-icon-document sidebar-icon" />
           <template #title>菜单管理</template>
