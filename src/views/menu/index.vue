@@ -37,7 +37,12 @@ import { reactive, Ref, ref } from 'vue'
 import MenuOptionsVue from './components/menu-options.vue'
 import MenuList from './components/menu-list.vue'
 import SourceOptions from './components/source-options.vue'
-import { MenuForm, MenuTreeData, OperateType, SourceData } from './components/interface'
+import {
+  MenuForm,
+  MenuTreeData,
+  OperateType,
+  SourceData
+} from './components/interface'
 import { sortObjList } from '@/util/index'
 
 export default {
@@ -168,6 +173,7 @@ export default {
       menuData?: MenuForm
     ): MenuTreeData[] {
       if (operateKey === 'addBro' && parentMenu && parentMenu.length === 0) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         parentMenu.push({ label: menuData!.name, ...menuData! })
         return parentMenu
       }
@@ -219,24 +225,24 @@ export default {
     }
 
     function editMenuOperations(
-        parentMenu: MenuTreeData[],
-        selectMenuName: string,
-        options: SourceData[] 
-      ): MenuTreeData[] {
-        for (let i = 0; i < parentMenu.length; i++) {
-          const curMenu = parentMenu[i]
-          if (curMenu.name === selectMenuName) {
-            curMenu.operations = options
-          } else {
-            if (curMenu.children && curMenu.children.length !== 0) {
-              editMenuOperations(curMenu.children, selectMenuName, options)
-            }
+      parentMenu: MenuTreeData[],
+      selectMenuName: string,
+      options: SourceData[]
+    ): MenuTreeData[] {
+      for (let i = 0; i < parentMenu.length; i++) {
+        const curMenu = parentMenu[i]
+        if (curMenu.name === selectMenuName) {
+          curMenu.operations = options
+        } else {
+          if (curMenu.children && curMenu.children.length !== 0) {
+            editMenuOperations(curMenu.children, selectMenuName, options)
           }
         }
-        return parentMenu
       }
+      return parentMenu
+    }
     function sourceOptionsChangeHandler(list: SourceData[]) {
-      if(selectedName.value) {
+      if (selectedName.value) {
         editMenuOperations(menuTree, selectedName.value, list)
       }
       console.log(menuTree)
