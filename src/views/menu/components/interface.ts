@@ -13,6 +13,16 @@ export type RequestMethod =
 export type OperateType = 'addBro' | 'addChild' | 'editNode' | 'delNode' | ''
 export type ResourceType = 'api' | 'resource'
 export type SourceType = 'api' | 'btn' //资源类型
+export interface Meta {
+  title: string
+  activeMenu: string
+  showIndBreead: boolean
+  showInBread: boolean
+  isCache: boolean
+  showInMenu: boolean
+  sort: number
+  icon: string
+}
 export interface MenuOptions {
   name: string
   path: string
@@ -39,6 +49,7 @@ export interface MenuForm {
   showInMenu: boolean
   isCache: boolean
   icon: string
+  activeMenu: string
   sort: number
   redirect: string
   type: MenuType

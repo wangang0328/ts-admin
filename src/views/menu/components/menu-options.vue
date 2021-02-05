@@ -20,6 +20,9 @@
       <el-form-item label="路径" prop="path">
         <el-input v-model="path" placeholder="菜单路由" />
       </el-form-item>
+      <el-form-item label="高亮路径" prop="activeMenu">
+        <el-input v-model="activeMenu" placeholder="菜单路由" />
+      </el-form-item>
       <el-form-item label="菜单类型" prop="type">
         <el-select v-model="type" placeholder="请选择菜单类型">
           <el-option label="目录" value="menu"></el-option>
@@ -114,6 +117,7 @@ export default {
       sort: 200,
       redirect: '',
       type: 'menu',
+      activeMenu: '',
       children: [],
       operations: []
     })

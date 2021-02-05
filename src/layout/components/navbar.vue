@@ -5,7 +5,25 @@
       <Breadcrumb />
     </div>
     <div class="navbar-right">
-      ss
+      <el-dropdown>
+        <span class="el-dropdown-link">
+          <el-avatar
+            src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"
+          >
+          </el-avatar>
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>
+              <router-link to="/profile">
+                个人中心
+              </router-link>
+            </el-dropdown-item>
+            <el-dropdown-item divided>退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
   </div>
 </template>
@@ -20,7 +38,7 @@ export default {
     return {}
   },
   methods: {
-    test(){
+    test() {
       console.log('测试test')
     }
   },
@@ -45,4 +63,6 @@ export default {
     display: flex
     height: 100%
     align-items: center
+  .navbar-right
+    padding-right: 20px
 </style>

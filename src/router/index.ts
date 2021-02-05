@@ -4,11 +4,17 @@ import Layout from '@/layout/index.vue'
 export const constantRoutes: Array<RouteRecordRaw> = [
   {
     path: '/profile',
-    component: () => import('@/views/profile/index.vue'),
-    meta: {
-      hidden: true,
-      title: 'profile'
-    }
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/profile/index.vue'),
+        meta: {
+          hidden: true,
+          title: 'profile'
+        }
+      }
+    ]
   },
   {
     path: '/login',
@@ -103,19 +109,16 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
         path: 'index',
         name: 'Icon',
         component: () => import('@/views/icons/index.vue'),
-        meta: {
-          
-        }
+        meta: {}
       }
     ]
   },
   {
     path: '/menu',
     component: Layout,
-    redirect: 'index',
     children: [
       {
-        path: 'index',
+        path: '',
         name: 'Menu',
         component: () => import('@/views/menu/index.vue')
       }
